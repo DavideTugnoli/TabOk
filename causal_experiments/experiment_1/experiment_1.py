@@ -241,7 +241,7 @@ def run_experiment_1(config=None, output_dir="experiment_1_results", resume=True
         for train_idx, train_size in enumerate(config['train_sizes']):
             for rep in range(config['n_repetitions']):
                 row_without_dag = run_single_configuration(
-                    train_size, 'no_dag', rep, config, X_test_original, col_names, categorical_cols, correct_dag, no_dag_column_order, no_dag_order_strategy, data_samples_dir=data_samples_dir
+                    train_size, 'no_dag', rep, config, X_test_original, col_names, categorical_cols, correct_dag, no_dag_column_order, column_order_name, data_samples_dir=data_samples_dir
                 )
                 results_so_far.append(row_without_dag)
                 df_current = pd.DataFrame(results_so_far)
