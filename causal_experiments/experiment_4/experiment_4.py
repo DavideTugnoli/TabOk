@@ -377,21 +377,21 @@ def run_experiment_4(cpdag, config=None, output_dir="experiment_4_results", resu
         print("\nExperiment interrupted. Progress saved!")
         return pd.DataFrame(results_so_far)
     
-    # Test with true DAG as reference
-    print("\nTesting with true DAG as reference...")
-    true_dag, _, _ = get_dag_and_config(config['include_categorical'])
-    
-    for train_size in config['train_sizes']:
-        for rep in range(config['n_repetitions']):
-            result = run_single_configuration(
-                train_size, 'true_dag', rep, config, X_test,
-                {'true_dag': true_dag}, col_names, categorical_cols, no_dag_column_order,
-                data_samples_dir=data_samples_dir, hash_check_dict=hash_check_dict
-            )
-            results_so_far.append(result)
-            # Save to CSV incrementally
-            df_current = pd.DataFrame(results_so_far)
-            df_current.to_csv(output_dir / "raw_results.csv", index=False, na_rep='')
+    # Only run the extra true_dag reference if it was NOT already found
+    if not true_dag_found:
+        print("\nTesting with true DAG as reference...")
+        true_dag, _, _ = get_dag_and_config(config['include_categorical'])
+        for train_size in config['train_sizes']:
+            for rep in range(config['n_repetitions']):
+                result = run_single_configuration(
+                    train_size, 'true_dag', rep, config, X_test,
+                    {'true_dag': true_dag}, col_names, categorical_cols, no_dag_column_order,
+                    data_samples_dir=data_samples_dir, hash_check_dict=hash_check_dict
+                )
+                results_so_far.append(result)
+                # Save to CSV incrementally
+                df_current = pd.DataFrame(results_so_far)
+                df_current.to_csv(output_dir / "raw_results.csv", index=False, na_rep='')
     
     # Experiment completed
     print("\nExperiment completed!")

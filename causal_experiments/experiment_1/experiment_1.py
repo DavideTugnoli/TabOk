@@ -166,7 +166,10 @@ def run_single_configuration(train_size, dag_type, repetition, config,
             hash_check_dict[key] = (train_hash, test_hash)
     result_row, X_synth = None, None
     if dag_type == 'no_dag':
-        result_row, X_synth, col_names_reordered = run_no_dag(X_train_original, X_test, col_names, categorical_cols, config, seed, train_size, repetition, dag_type, no_dag_column_order, no_dag_order_strategy)
+        result_row, X_synth, col_names_reordered = run_no_dag(
+            X_train_original, X_test, col_names, categorical_cols,
+            no_dag_column_order, config, seed, train_size, repetition, no_dag_order_strategy
+        )
         if SAVE_DATA_SAMPLES and data_samples_dir:
             X_train_reordered, _, _ = reorder_data_and_columns(X_train_original, col_names, categorical_cols, no_dag_column_order)
             X_test_reordered, _, _ = reorder_data_and_columns(X_test, col_names, categorical_cols, no_dag_column_order)
@@ -238,7 +241,7 @@ def run_experiment_1(config=None, output_dir="experiment_1_results", resume=True
         for train_idx, train_size in enumerate(config['train_sizes']):
             for rep in range(config['n_repetitions']):
                 row_without_dag = run_single_configuration(
-                    train_size, 'no_dag', rep, config, X_test_original, col_names, categorical_cols, correct_dag, None, None, data_samples_dir=data_samples_dir
+                    train_size, 'no_dag', rep, config, X_test_original, col_names, categorical_cols, correct_dag, no_dag_column_order, no_dag_order_strategy, data_samples_dir=data_samples_dir
                 )
                 results_so_far.append(row_without_dag)
                 df_current = pd.DataFrame(results_so_far)
